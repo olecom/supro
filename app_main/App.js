@@ -319,10 +319,15 @@ var path, extjs, el, f
                 el.splice(0)// GC
             }
         }
-        el = void 0
+
         if(files.length){
             i = 0
+            // load 'ext-rest-nw.js' using cache actually
+            el = App.cfg.extjs.loadMiniInit
+            el && Ext.Loader.setConfig({ disableCaching: false })
             loadRestScripts()
+            el && Ext.Loader.setConfig({ disableCaching: true })
+            el = void 0
         } else {
             Ext_application()
         }

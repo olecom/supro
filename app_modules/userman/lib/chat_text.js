@@ -83,7 +83,7 @@ var d, f
         api.wes.broadcast('chatmsg@um', msg)
         local.log_file.write('{"d":"' + d.toISOString() + '",' + msg.slice(1))
 
-        return res && (ret.success = true, res.json(ret))
+        return res && res.json(ret)
     }
 
     function pad(n){

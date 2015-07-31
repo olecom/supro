@@ -65,6 +65,9 @@ l10n.um = { lang: 'en'// localization is used only in UI for ease of updates
         'App.view.desktop.BackendTools':'Main node.js process management (start/restart/stop)'
        ,'App.backend.JS':               'Running code inside main process (brain)'
    }
+  ,'!login': '!login'
+  ,'!auth': '!auth'
+  ,'!conflict': '!conflict'
   ,'!session_txt': 'No session and/or no plain text username'
   ,'!access': 'Remote access denied (not from `localhost`)'
   ,'!bad_upr': 'Bad user name, password, role'

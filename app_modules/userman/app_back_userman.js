@@ -135,11 +135,11 @@ log('TODO: drop priviledges so other app modules can not access anything')
     }
 
     function mwLogin(req, res){
-    var u, ret = { success: false, roles:[ ], err: null }
+    var u, ret = { roles:[ ], err: '!login' }
 
         if(req.session && (u = req.txt)){
             if(req.session.can){// auth-d show permissions list - "can"
-                ret.success = true
+                ret.err = void 0
                 ret.can = req.session.can
                 ret.user = req.session.user
 
@@ -148,7 +148,7 @@ log('TODO: drop priviledges so other app modules can not access anything')
 
             u = u.split('\n')[0]// user_id
             if((u = Users[u])){// pre auth shows roles
-                ret.success = true
+                ret.err = void 0
                 ret.roles = u.roles
 
                 return res.json(ret)// fast path
@@ -242,7 +242,7 @@ log('.allow by not in Can.Static and not in Can.API if not *.js: ' + perm)
         perm = req.url
         if(!~idx){// not *.js files
             res.statusCode = 401// crud reject (API calls)
-            res.json({ success: false, err: "URL '"+ (perm || '/') + "' Unauthorized" })
+            res.json({ err: "URL '"+ (perm || '/') + "' Unauthorized" })
         } else {
             perm = perm.slice(0, idx)
            /* gracefully reject Classes loaded from MVC files by phony UI e.g.:
@@ -272,19 +272,19 @@ log('!deny cmp:', perm)
     * }
     **/
     var data, u, r,
-        ret = { success: false, user: null, err: null, can: null }
+        ret = { err: '!auth', user: null, can: null }
 
         if(req.session){// i.e. there is '/login' but no `/logout`
             if((ret.can = req.session.can)){
                 ret.user = req.session.user
 
                 if(wes.is_online(req)){// check and reset to prevent races
-                    res.statusCode = 409, ret.err = "Conflict"
+                    res.statusCode = 409, ret.err = "!conflict"
                     return res.json(ret)
                 }
 
                 ret.modules = req.session.modules
-                ret.success = true
+                ret.err = void 0
                 res.json(ret)
 
                 //security: don't show permissions and modules to others
@@ -306,17 +306,19 @@ log('!deny cmp:', perm)
                 u = Users[data[0]]
                 r = data[1]
                 // check password and role name in user's allowed roles list
-                ret.success = u && u.pass === data[2] && !!(
-                              r &&~u.roles.indexOf(r))
+                ret.err = !(
+                    u && u.pass === data[2] && !!(
+                        r &&~u.roles.indexOf(r)
+                    )
+                )
 
                 if('developer.local' === r && !(
                     req.socket.remoteAddress == '::1' ||// ipv6@windows
                    ~req.socket.remoteAddress.indexOf('127.0.0.1'))){// ::ffff:127.0.0.1
-                    ret.success = false//security: don't allow remote access
-                    ret.err = '!access'
+                    ret.err = '!access'//security: don't allow remote access
                 }
 
-                if(ret.success){
+                if(!ret.err){
                     if(req.session.fail){
                         req.session.fail = 0
                     }

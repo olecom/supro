@@ -39,7 +39,7 @@ var chat_api = { 'user': null, 'text': null, 'deve': load_chat_api }
     return mwChat// return sync, log file open is later and can throw
 
     function mwChat(req, res, next){
-    var ret = { success: false, data: null }//                               \..../
+    var ret = { data: null, err: void 0 }//                                       \..../
     var m = req.url.slice(1, 5)// call from UI: App.backend.req('/um/lib/chat/deve')
 
         if(!req.session || (

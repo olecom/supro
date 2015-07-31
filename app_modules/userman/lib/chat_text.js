@@ -1,11 +1,15 @@
-//`new Function(...){`
-if(local.log_dir){
-    api_text(ret, api, local, req, res, next)
-} else {// directory is not ready
-    setTimeout(api_text, 1024, ret, api, local, req, res, next)
+(
+    check(),
+    "async"
+)
+
+function check(){
+    if(local.log_dir){// call API or ...
+        api_text(ret, api, local, req, res, next)
+    } else {// directory is not ready, run a bit later
+        setTimeout(api_text, 1024, ret, api, local, req, res, next)
+    }
 }
-return true// async anyway
-//`}`
 
 /*
  * Event(s):

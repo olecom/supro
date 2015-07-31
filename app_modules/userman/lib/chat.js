@@ -53,8 +53,9 @@ var chat_api = { 'user': null, 'text': null, 'deve': load_chat_api }
         if(req.url.query){
             req.url.query = qs.parse(req.url.query)
         }
-        if(chat_api[m]){
-            if(!chat_api[m](ret, api, local, req, res, next)){// try/catch by `connect`
+        var call = chat_api[m]
+        if(call){
+            if(!call(ret, api, local, req, res, next)){// try/catch by `connect`
                 return res.json(ret)// sync
             }// async
         } else {
@@ -82,7 +83,7 @@ var chat_api = { 'user': null, 'text': null, 'deve': load_chat_api }
                 chat_api[m] && (tmp = chat_api[m])
                 try {
                     chat_api[m] = new Function(
-                       'ret, api, local, req, res, next',
+                       'ret, api, local, req, res, next','return '+
                         fs.readFileSync(__dirname + '/chat_' + m + '.js', 'utf8')
                     )
                 } catch(ex){

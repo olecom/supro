@@ -14,14 +14,15 @@ var idx
         if(0 < (idx = err.indexOf('error index:'))){
             err = err.slice(idx)
         }
-    } else if(('MongoError' == err.name) ||
-              (err.stack && 0 == err.stack.indexOf('MongoError'))){
-        // raw DB errors
-        err = String(err.err)// use short message
-        if(0 < (idx = err.indexOf('error index:'))){
-            err = err.slice(idx)
-        }
     }
+    /*else if(('MongoError' == err.name) ||
+     *         (err.stack && 0 == err.stack.indexOf('MongoError'))){
+     *   // raw DB errors
+     *   err = String(err.err)// use short message
+     *   if(0 < (idx = err.indexOf('error index:'))){
+     *       err = err.slice(idx)
+     *   }
+    }*/
 
     if(res._header || res.finished){// `res` was sent already
         res.json = pushUncaughtException

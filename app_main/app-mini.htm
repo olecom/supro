@@ -8,6 +8,7 @@
 <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoAwAAFgAAACgAAAAQAAAAIAAAAAEAGAAAAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/lDo/lDo6izRPqkyFhYU9DQA9DQAAAAAAAAAsdiYobSEyfiwAAAAAAAAAAAA+kTlAlTtXu1U9kDc6gzSFhYU9DQA9DQA4ijI+kzkMNgFCADMbwhYAAAAAAAAAAAA/lDo/lDo1gi5CEAE9DQA9DQA9DQA9DQA9DQA9DQBCEAE4ijImniEgeBsqliY9kTc/kzo1gi5CEAE9DQAH+vIH+vI9DQAH+vIH+vIEz949DQAuCgA4ijJZg1EWmxM9kTc5eTJCEAE9DQAH+vJPEgEH+vI9DQAH+vIH+vIH+vI4DQE4DQGhoaExjiwWmxMycis9kTehoaE9DQAICAg9kTeFhYU9DQA9DQCHh4cH+vIH+vI9DQBCEAE1gi4yky1CnT49kTc9kTc9kTc9kTc9kTeFhYU9DQBHR0c5iTSHh4cH+vIFBQVCEAE1gi5AkDs9kTdFnT9ImkM4ijLU0s89DQA9DQA9DQA9DQCHh4cH+vIH+vI9DQChoaEthygulCo9kTc9kTc1gi5CEAE9DQAH+vIH+vIH+vIH+vIH+vIH+vIEz95CEAE4ijI2izEA1wA9kTcAAAChoaE9DQAEz94H+vKHh4c9DQA9DQA9DQA9DQBCEAE4ijI7kzYviyp6gnI9kTc1gi4uCgA9DQAH+vIFAQA1gi49DQA9DQA5iTQ/jDo8ijdXUU83bjE2ezA5iTQ9kTc1gi4uCgA9DQAH+vIFAQAAAAA9DQA9DQBCEAHU0s9CEAF9e3o1gi4AAAA9jzc9kTcAAAChoaE9DQBCEAEH+vKHh4c9DQBCEAEH+vIH+vIFBQVCEAGFhYUAAAAyfCw9kTc9kTcoeCFCEAE9DQAH+vIH+vI9DQBCEAEH+vIH+vIFBQU9DQA1gi4ANAAzfi0ANAA9kTcbaBNNnkpCEAE9DQA9DQA9DQA9DQA9DQA9DQBCEAE1gi40fy8+kzoxeysqdyMkcR0ANAAANAAANAA1gi4uCgA9DQA9DQA4ijI4ijIANAAANAAANAA+kTkAAAD8fwAA/H8AAPAPAADgBwAAwAMAAMQDAAD8QwAA8AMAAOAHAADADwAAwn8AAMIHAADAAwAA4AcAAPAPAAD8fwAA" />
 <style>/*<![CDATA[ app.css */
 /* TODO flag: background-color: red !important; */
+script_blockers { color:red; }
 .sg-c { background-image:url(css/comments_delete.png); }
 .sg-e { background-image:url(css/script_link.png); }
 .sg-s { background-image:url(css/shutdown-sml.png); }
@@ -98,6 +99,10 @@ var b, s = "FATAL ERROR: no language! File './l10n/ru.js' or similar."
 if(!w.l10n) return d.write(s) && w.alert(s)
 _startTime = new Date().getTime()
 localStorage.devSUPRO = '' // enable fast minimized loading
+// message for script_blockers
+b = d.styleSheets[0]
+b = b && (b.cssRules || b.rules)
+b[0] && (b[0].style.display = 'none')
 w.addEventListener('error', window_error)// show any errors early
 con.log('checking `localStorage.l10n`...')
 if((s = localStorage.l10n) && s !== l10n.lang){
@@ -115,10 +120,34 @@ w.addEventListener('load', function pre_onload(e){
 var b = d.createElement('b')
 b.innerHTML = l10n.loading
 d.getElementById('startup').appendChild(b)
+w.removeEventListener('load', pre_onload)
+b = new XMLHttpRequest
+b.onreadystatechange = load_core_files
+// async load of ['App.js', 'app_front.js']
+b.open('GET', 'App.js', true)// preload App && ExtJS stuff
+b.send()
+return
+function load_core_files(res){
+var txt, req = res.target
+if(4 != req.readyState) return
+txt = req.responseText//        nw has it zero
+if(!txt || !(200 == req.status || 0 == req.status)) throw new Error(
+l10n.errload_no_app + '<br>' + l10n.errload +'<br>URL: ' + req.responseURL
+)
+// sync loading of initial stuff
+// <script src=""> is not used to handle possible connection errors
+txt = d.createElement('script')
+.appendChild(d.createTextNode(txt))
+.parentNode
+txt.setAttribute('type', 'application/javascript')
+txt.setAttribute('charset', 'utf-8')
+d.head.appendChild(txt)
+txt = void 0
+if(!b) return
+b.open('GET', 'app_front.js', true)// via http this is 'app_front_http.js'
+b.send()
 b = void 0
-e.target.removeEventListener(e.type, pre_onload)
-startup('/extjs/ext-lite-nw.js')
-startup('app_front.js')// via http this is 'app_front_http.js'
+}
 })
 return
 function window_error(errEvent){
@@ -166,27 +195,6 @@ errEvent.error
 w.alert && w.alert(l10n.uncaughtException  + errEvent.message)
 w.alert = null// show fatal error once
 }
-function startup(file){
-var b = new XMLHttpRequest
-// sync loading of initial stuff
-// <script src=""> is not used to handle possible connection errors
-b.open('GET', file, false)
-b.send()
-if(b.responseText){
-if(200 != b.status && b.status !== 0){// nw has it zero
-throw new Error('!' + b.responseText)// backend
-}
-d.head.removeChild(d.head.getElementsByTagName('script')[0])
-b = d.createElement('script')
-.appendChild(d.createTextNode(b.responseText))
-.parentNode
-b.setAttribute('type', 'application/javascript')
-b.setAttribute('charset', 'utf-8')
-d.head.appendChild(b)
-} else {
-d.write(l10n.errload_no_app + '<br>' + l10n.errload)
-}
-}
 })(window, document, window.console)
 </script>
 <!-- script type="text/javascript" src="test.js" charset="utf-8"></script-->
@@ -195,18 +203,22 @@ d.write(l10n.errload_no_app + '<br>' + l10n.errload)
 <center id='startup'>
 <noscript><br/>
 <h2 style="color:red">
-Error: NO JavaScript. Sorry!<br/>
+Error: NO JavaScript available. Sorry!<br/>
 Без включенного JavaScript ждать нечего!
 </h2>
 </noscript>
+<script_blockers><br/>
+<h2>
+Error: NO JavaScript enabled. Sorry!<br/>
+Без включенного JavaScript ждать нечего!
+</h2>
+</script_blockers>
 <a href="http://www.sencha.com/products/extjs/">
 <img src="css/powered.gif" title="ExtJS" alt="ExtJS"/>
 </a><br/>
 <img src='css/loading.gif'/><br/>
 <a href='credits_node-nw.js.html'>nw.js + node.js credits</a><br/><br/>
-<center id="e" style="background-color:red;color:white;display:none">
-<h2 id="d"></h2><br>
-</center>
+<pre id="e" style="background-color:red;color:white;display:none"></pre>
 </center>
 <textarea id="grid_copy_buffer" onfocus="this.select()" style="position:absolute; top:-8px; width:1px;height:1px;">
 copy|paste

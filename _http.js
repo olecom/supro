@@ -1,4 +1,5 @@
-var ctl, http = require('http'), res = ''
+var ctl, res, len
+var http = require('http')
 
 ctl = http.get(// requesting info from remote api
     process.argv[2],// 'url:port/cmd'
@@ -9,17 +10,19 @@ ctl.on('error', ret_data)
 ctl.end()
 
 function getData(ctlres){
-    ctlres.setEncoding('utf8')
+    res = [], len = res.length
     ctlres.on('data', get_chunk)// collecting data chunks
     ctlres.on('end', ret_data)// end of processing
 }
 function get_chunk(chunk){
-    res += chunk
+    len += chunk.length
+    res.push(chunk)
 }
 function ret_data(e){
     e && console.log('error: ', e)
     setImmediate(function(){
-        console.log('res: "' + res + '"')
+        console.log('_http res: ', Buffer.concat(res, len).toString())
+        res = void 0
         process.exit(e ? 1 : 0)
     }, 64)
 }

@@ -69,6 +69,14 @@ var ui, App_backend_JS = 'App.backend.JS'// UI component
             }
          }
          **/
+        if('development' == process.env.NODE_ENV){
+            local = {
+                cfg: cfg,
+                require:{
+                    fs: require('fs')
+                }
+            }
+        }
 
         if(!req.session || // use auth module or not
            (req.session && req.session.can && req.session.can[App_backend_JS])){

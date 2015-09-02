@@ -4,6 +4,7 @@
 # * any param "$1" will redirect node.js' output i.e:
 #   1>>log/app_back_stdout.txt 2>>log/app_back_stderr.txt
 # * if env $NODEJS_CONFIG is exported it is used and no hardcoded file is read
+# * if env $NODEJS_BIN is exported then this binary name will be used instead of `node`
 
 cd "${0%/*}" 2>/dev/null
 set -e
@@ -67,7 +68,10 @@ A=${NODEJS_CONFIG##*backend:{}
 A=${A##*file:[ \'\"][\'\"]}
 A=${A%%[\'\"],*} # app_main/app_back.js
 
-BACKEND="node $A"
+if [ "$NODEJS_BIN" ]
+then echo '^ $NODEJS_BIN is set, run "'"$NODEJS_BIN"'"' && BACKEND="$NODEJS_BIN $A"
+else echo '^ $NODEJS_BIN is not set, run `node`' && BACKEND="node $A"
+fi
 
 A=${A##*/}
 A=${A%%.js*} # app_back

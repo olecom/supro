@@ -9,6 +9,8 @@ script_blockers { color:red; }
 .sg-k { background-image:url(css/link_delete.png); }
 .sg-m { background-image:url(css/comments.png); }
 
+.btn-add { background-image:url(css/add-16.png); }
+
 .redwhite { background-color: #FF0000 !important; color: #FFFFFF; }
 .new-bold-row .x-grid-cell { font-weight: bold; }
 #stscount { color: blue; }

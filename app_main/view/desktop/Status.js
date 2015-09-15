@@ -20,6 +20,19 @@ Ext.define('App.view.desktop.StatusGrid',{
         xtype: 'toolbar',
         dock: 'top',
         items:[
+            'var:'
+            ,{
+            text: l10n.btnAdd + ' <b>app_module</b>'
+           ,iconCls: 'btn-add'
+           ,handler: function(){
+
+                }
+            },'-'
+        ]
+    },{
+        xtype: 'toolbar',
+        dock: 'top',
+        items:[
             'log: ',
             {
             text: l10n.stsMarkRead

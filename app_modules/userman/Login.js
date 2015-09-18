@@ -592,6 +592,8 @@ function doAuth(){
 }
 
 function callbackAuth(err, json, res){
+    if(!view) return
+
     if(!err){
         return view.fadeOut(finishAuth)
     } else {

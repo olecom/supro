@@ -31,9 +31,11 @@ config = {
 /* NOTE: this is not JSON just JavaScript
  *       idea is taken from github.com/louischatriot/mongo-edit
  */
-    /* standard configuration of extjs+node[.js -webkit] application */
+    __name: 'cfg_mongo_lftp',
 
+    /* standard configuration of extjs+node[.js -webkit] application */
     lang: 'ru',// base localization, must be provided by any module as fallback
+    data: 'data/',// directory for application data; defaults to 'data/'
     log: 'log/',
 
     //TODO: uid gid new ids for process after start or partial init

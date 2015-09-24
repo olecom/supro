@@ -6,6 +6,7 @@ var http = require('http')
 http.ServerResponse.prototype.ContentTypes = {
     AppJSON:   { 'Content-Type': 'application/json; charset=utf-8' },
     AppJS:     { 'Content-Type': 'application/javascript; charset=utf-8' },
+    TextHTM:   { 'Content-Type': 'text/html; charset=utf-8' },
     TextCSS:   { 'Content-Type': 'text/css; charset=utf-8' },
     TextPlain: { 'Content-Type': 'text/plain; charset=utf-8' }
 }

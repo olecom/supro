@@ -1,7 +1,8 @@
 module.exports = function make_mw_sendFile(name, absolute, start, end){
+var fs = require('fs')
+
     return function sendFile(r__, res, next){
-    var fs = require('fs')
-       ,fstream = fs.createReadStream(
+    var fstream = fs.createReadStream(
             ( absolute ? '' : __dirname + '/../../') + name,
             { start: start, end: end }
         )
@@ -11,11 +12,12 @@ module.exports = function make_mw_sendFile(name, absolute, start, end){
             return fs.fstat(fd,
             function on_fstat(err, stat){
                 if(err){
-                    log('sendFile err: ', err)
+                    log('!sendFile err: ', err)
                     return next(err)
                 }
                 res.setHeader('Content-Length', stat.size)
                 res.setHeader('Content-Type',(
+                   ~name.indexOf('htm') ? res.ContentTypes.TextHTM :
                    ~name.indexOf('css') ? res.ContentTypes.TextCSS :
                    ~name.indexOf('.js') ? res.ContentTypes.AppJS :
                     res.ContentTypes.TextPlain)['Content-Type']

@@ -26,8 +26,7 @@ function ret_data(e){
     e && console.log('!Error _http.js: ', e)
     setImmediate(function(){
         console.log('_http res:')
-        console.log(Buffer.concat(res, len).toString())
-        res = void 0
+        res && (console.log(Buffer.concat(res, len).toString()), res = void 0)
         process.exit(e ? 1 : 0)
     }, 64)
 }

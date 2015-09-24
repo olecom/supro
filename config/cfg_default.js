@@ -10,6 +10,28 @@ config = {
     data: 'data/',// directory for application data; defaults to 'data/'
     log: 'log/',
 
+    /* parse, serve from '/data/' directory 'app.htm', 'app-mini.htm' and
+     * `l10n` files with replaced strings from this OEM config
+
+    oem:{
+        htm:{// no localization applied
+            icon: '/css/userman/shutdown.png',// URL
+            logo: '/css/suproem.png',// URL
+            title: 'SUPRO OEM v000&copy;2015-??-??'
+        },
+        l10n:{
+            en:{
+                welcome: 'OEM SUPRO welcomes: application development',
+                app: 'OEM SUPRO Demo'
+            },
+            ru:{
+                welcome: 'Вас приветствует OEM СУПРО!',
+                app: 'OEM СУПРО Демо'
+            }
+        }
+    },
+     */
+
     //TODO: uid gid new ids for process after start or partial init
     modules:{// cfg for stack of things from 'app_modules'
     // order matters: before auth module there are no restrictions to config

@@ -323,5 +323,8 @@ strip_css_html 'app_main/app.htm' 'app_main/app-mini.htm'
 # output e.g. "/d/extjs-4.2/ext-all-nw.js" NOTE: this is mingw path
 strip_whitespace "$EXTJS4$JSFILE" "$OUTPUT$NWFILE"
 
+echo '
+NOTE: reload app to update files changed by OEM config (if used)!'
+
 trap '' 0
 exit 0

@@ -22,9 +22,11 @@ var body = ''
     log('ctl req url:' + req.url)
     if ('/sts_running' == req.url){
         body += uncaughtExceptions.join('\n====\n')
+    } else if('/cmd_reload' == req.url){
+        body += '$ is reloading\n'
+        return the_end()
     } else if('/cmd_exit' == req.url){
         return call_done_handlers(req, res, done_handlers)
-        //body += '$ is going down\n'
     } else if ('/cmd_stat' == req.url){
         body += Math.ceil(process.uptime()) + '\n' + ctl.toISOString()
     } else {// show some info about this
@@ -113,7 +115,7 @@ function the_end(code, res){
         log('$ application exit with code: ' + (code ? code : 0))
         process.exit(code ? code : 0)
     })
-    return res.end()
+    res && res.end()
 }
 
 ctl.listen(cfg.backend.ctl_port ,'127.0.0.1' ,run_backend)

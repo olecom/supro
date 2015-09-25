@@ -5,6 +5,8 @@
 #   1>>log/app_back_stdout.txt 2>>log/app_back_stderr.txt
 # * if env $NODEJS_CONFIG is exported it is used and no hardcoded file is read
 # * if env $NODEJS_BIN is exported then this binary name will be used instead of `node`
+# * env $NODEJS_RELOAD app doesn't call `call_done_handlers()` when shuts down
+#   i.e. doesn't stop `mongodb`
 
 cd "${0%/*}" 2>/dev/null
 set -e
@@ -134,6 +136,6 @@ Stop backend (y/n)? '
         } || normal_exit
     }
 
-    _http 'cmd_exit' || :
-    $BACKEND 1>&7 2>&8 &
+    _http 'cmd_reload' || :
+    NODEJS_RELOAD='y' $BACKEND 1>&7 2>&8 &
 done

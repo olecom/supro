@@ -78,19 +78,20 @@ A=${NODEJS_CONFIG##*backend:{}
 A=${A##*file:[ \'\"][\'\"]}
 A=${A%%[\'\"],*} # app_main/app_back.js
 
-if [ "$NODEJS_BIN" ]
-then echo '^ $NODEJS_BIN is set, run "'"$NODEJS_BIN"'"' && BACKEND="$NODEJS_BIN $A"
-else echo '^ $NODEJS_BIN is not set, run `node`' && BACKEND="node $A"
+if [ "$NODEJS_BIN" ] # for `node-debug`
+then echo '^ $NODEJS_BIN is set, run "'"$NODEJS_BIN"'"' && BACKEND="$NODEJS_BIN"
+else echo '^ $NODEJS_BIN is not set, run `node`' && BACKEND=node
 fi
 
-A=${A##*/}
-A=${A%%.js*} # app_back
-
 echo '
-^ running Node.JS backend
+^ running backend on Node.JS '"`$BACKEND -v`"'
 ^ command: `'"$BACKEND"'`
 ^ ctlport: "'"$BACKEND_PORT"'"
 '
+
+BACKEND="$BACKEND $A"
+A=${A##*/}
+A=${A%%.js*} # app_back
 
 # lftp way of http access (obsolete): `_lftp_http 1 'cmd_exit'`
 _lftp_http() { # $1=timeout $2=cmd

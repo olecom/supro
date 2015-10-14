@@ -167,7 +167,7 @@ function logout(cb){
  */
 
 var themeLogin = {
-    width: 354,
+    width: 444,
     height: 304
 }
 
@@ -203,7 +203,7 @@ Ext.define('App.um.view.Login',{
 +'  <a href="/">' + l10n.reload + '</a>'
 +'</div>'
 +'<div id="login-view"'// background is in CSS (for correct and easy image path)
-+'  style="position: relative; top: -50px; height: 244px;">'
++'  style="position: relative; top: -50px; height: 256px;">'
 
 +'  <div id="l10n" style="background-color: #D3D3D3; padding-top: 4px; margin-top: 4px;">'
 +'    &nbsp;<span class="ru">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'
@@ -315,7 +315,7 @@ Ext.define('App.um.view.Login',{
                 name: 'user',
                 msgTarget: 'none',// mini: prevent default 'qtip'
                 emptyText: l10n.um.loginUserBlank,
-                width: 177,
+                width: themeLogin.width - 167,
                 allowBlank: true,
                 enableKeyEvents: true,
                 hideTrigger: true
@@ -325,7 +325,7 @@ Ext.define('App.um.view.Login',{
                 //the other 2 items are given flex: 1, so will share the rest of the space
                 xtype: 'combo',
                 name: 'role',
-                width: 177,
+                width: themeLogin.width - 167,
                 queryMode: 'local',
                 msgTarget: 'none',// mini: prevent default 'qtip'
                 value: l10n.um.role,
@@ -344,14 +344,14 @@ Ext.define('App.um.view.Login',{
                 xtype: 'textfield',
                 name: 'pass',
                 emptyText: '*******',
-                width: 133,
+                width: themeLogin.width - 211,
                 inputType: 'password',
                 msgTarget: 'none',// mini: prevent default 'qtip'
                 allowBlank: false,
                 disabled: true
             },{
                 xtype: 'button',
-                width: 133,
+                width: themeLogin.width - 211,
                 iconCls: 'ok',
                 itemId: 'ok',
                 text: l10n.um.loginOk,

@@ -320,7 +320,7 @@ var path, extjs, el, f
             }
         }
 
-        if(files.length){
+        if(files && files.length){
             i = 0
             // load 'ext-rest-nw.js' using cache actually
             el = App.cfg.extjs.loadMiniInit

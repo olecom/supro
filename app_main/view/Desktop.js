@@ -39,6 +39,10 @@ Ext.define('App.view.Desktop',
     extend: Ext.Container,
     id: 'desk',
     xtype: 'desktop'
+   ,requires:[
+        'App.model.Base',
+        'App.model.Status'
+    ]
    ,region: 'center'// border layout
    ,style: 'overflow: hidden;'
    ,border: false
@@ -60,6 +64,7 @@ Ext.define('App.view.Desktop',
 
         function initDesktopStatus(){
             return Ext.Loader.require([// load components after auth
+                'App.store.Status',
                 'App.view.desktop.Status',
                 'App.view.desktop.BackendTools'
                 ],

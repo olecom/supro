@@ -69,7 +69,9 @@ about_file
 name_example
     }
     ,uncaughtException: "Unexpected internal error! Developer's assistance is needed.\n"
-    ,warn_js: 'JS eval is allowed from any external connection to backend!'
+    ,warn_js:
+'JS eval on backend is allowed from any external connection!<br/><br/>' +
+'Configuration of this application has no "userman" module with authorization support.'
 
     ,stsSystem: 'Backend (main) process connection. Info/Log.'
     ,stsHandleTipTitle: 'What happens inside of the system?'

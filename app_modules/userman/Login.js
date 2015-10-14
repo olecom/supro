@@ -205,6 +205,12 @@ Ext.define('App.um.view.Login',{
 +'<div id="login-view"'// background is in CSS (for correct and easy image path)
 +'  style="position: relative; top: -50px; height: 244px;">'
 
++'  <div id="l10n" style="background-color: #D3D3D3; padding-top: 4px; margin-top: 4px;">'
++'    &nbsp;<span class="ru">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'
++'    &nbsp;<span class="en">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'
++'    &nbsp;<span class="l10n-reset"><abbr title="' + l10n.um.l10nReset + '">&nbsp;&nbsp;&nbsp;</abbr></span>'
++'  </div>'
+
 +'  <div id="login-dd"'
 +'    style="cursor: move; text-shadow: #CCC 2px 3px 0; font: 3em serif;">'
 +     l10n.app
@@ -215,11 +221,6 @@ Ext.define('App.um.view.Login',{
 +'  </div>'
 +   l10n.um.loginInfo
 +'  <br/><br/>&copy; 2014 olecom@gmail.com<br/>'
-+'  <div id="l10n" style="background-color: #D3D3D3; padding-top: 4px; margin-top: 4px;">'
-+'    &nbsp;<span class="ru">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'
-+'    &nbsp;<span class="en">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'
-+'    &nbsp;<span class="l10n-reset"><abbr title="' + l10n.um.l10nReset + '">&nbsp;&nbsp;&nbsp;</abbr></span>'
-+'  </div>'
 +'</div>'// login-view
     }],
 

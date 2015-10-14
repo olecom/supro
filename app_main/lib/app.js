@@ -46,6 +46,7 @@ var api      = require('./api.js')
 
     /* backend static files for HTTP users */
     cfg.oem && oem_files()
+    app.use('/l10n/configured.js', sendFile('/l10n/' + cfg.lang + '.js'))
     app.use('/', connect['static'](__dirname + '/../', {
         index: cfg.extjs.loadMiniInit ? 'app-mini.htm' : 'app.htm'
     }))
@@ -182,6 +183,8 @@ if(cfg.oem.l10n){
 
         if(~l10nFiles.indexOf(req.url)){
             return sendFile(rootPrefix + req.url.slice(6), true)(req, res, next)
+        } else if('/l10n/configured.js' == req.url){
+            return sendFile(rootPrefix + cfg.lang + '.js', true)(req, res, next)
         }
         return next()
     }

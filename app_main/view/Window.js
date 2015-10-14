@@ -14,13 +14,15 @@ Ext.define('App.view.Window',
     function initSubAppWindow(){
     // while loading this view, be ready to fail and cleanup in `app.htm->window_error()`
     var me = App.mod.wnd = this
+       ,refresh
 
         if(me.id && !me.wmId) me.wmId = me.id
         if(!me.wmId) throw new Error('no `wmId || id` property in: ' + me.$className)
 
         me.icon = me.wmImg
-        me.tools = [
-        {
+        me.tools = [ ]
+
+        refresh = {
             type: 'refresh',
             tooltip: ''// developer's stuff must have no `l10n`
 +(localStorage.devSUPRO ? '<b style="background-color:black;color:white">[F2]</b> ':'')
@@ -29,12 +31,18 @@ Ext.define('App.view.Window',
 +'hook to <b>thisView.on("destroy")</b> event to reload anything else<br>'
 +'<b>Classes:</b><br>' + (me.__ctl || '') + '<br>' + me.$className,
             callback: App.reload
-        },
-        {
+        }
+
+        if(App.User){
+            App.User.can['App.view.Window->tools.refresh'] && me.tools.push(refresh)
+        } else {
+            me.tools.push(refresh)
+        }
+        me.tools.push({
             type: 'help',
             tooltip: 'Get Help Abstract',
             callback: App.getHelpAbstract
-        }]
+        })
 
         if(!me.constrainTo) me.constrainTo = Ext.getCmp('desk').getEl()
         Ext.window.Window.prototype.initComponent.call(me)//me.callParent()

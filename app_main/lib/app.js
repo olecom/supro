@@ -99,7 +99,7 @@ if(cfg.oem.htm){
         s = fs.readFileSync(f).toString()
         // replace oem strings
         cfg.oem.htm.title && (s = s.replace(/<title>[^<]*<[/]title>/g, '<title>'+ cfg.oem.htm.title +'</title>'))
-        cfg.oem.htm.logo && (s = s.replace(/url[(][/]css[/]supro.png[)]/, 'url('+ cfg.oem.htm.logo +')'))
+        cfg.oem.htm.logo && (s = s.replace(/url[(]css[/]supro.png[)]/, 'url('+ cfg.oem.htm.logo +')'))
         if(cfg.oem.htm.icon){
             s = s.replace(/<!-- "Yellow[^>]*>/g,'')// remove credit
             s = s.replace(/<link rel="icon"[^>]*>/g,'<link rel="icon" href="' + cfg.oem.htm.icon + '"/>')
@@ -169,6 +169,8 @@ if(cfg.oem.l10n){
 }
         // send them if requested in mw stack from /data dir
         app.use('/', mwRootDir)
+        // send oem config into ui for background reset if needed
+        cfg.oem && (cfg.extjs.oem = cfg.oem)
     }
 
     function mwRootDir(req, res, next){

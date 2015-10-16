@@ -441,7 +441,22 @@ var cfg, fs = require('fs')
         connectjs: app.versions.connectjs,
         nw: app.process.versions['node-webkit']
     }
-    con.log('reading config: ' + cfg + ' done')
+    con.log(''
++'nw.js: reading config: ' + cfg + '\n'
++'nw.js: loading configured `l10n`: ' + app.cfg.lang
+    )
+
+    if(app.cfg.oem){
+    // "D:/_Projects/supro-olecom/app_main/app.htm" ->
+    // "D:/_Projects/supro-olecom/data/cfg_mini_[ htm || js]"
+        cfg = global.require.main.filename.replace(
+            /[/]app.htm$/,
+            '/../data/' + (app.cfg.__name || '') + '_'
+        )
+        app.cfg.oem.htm.title && (doc.title = app.cfg.oem.htm.title.replace(/&copy;/, '©'))
+    } else {// normal not OEM case
+        cfg = 'l10n/'
+    }
 
     fs = doc.head.getElementsByTagName('script')
     doc.head.removeChild(fs[0])

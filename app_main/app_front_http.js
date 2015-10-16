@@ -6,7 +6,8 @@
 ;(function app_front_http(url){
 var xhr = new XMLHttpRequest
 
-    xhr.open('GET', (url || '') + '/app.config.extjs.json', true)
+    url = url || ''
+    xhr.open('GET', url + '/app.config.extjs.json', true)
     xhr.onreadystatechange = load_config_then_check_ExtJS
     xhr.send()
     xhr = null
@@ -42,7 +43,14 @@ var xhr = new XMLHttpRequest
             + '-' + (extjs_config.loadMiniInit ? 'nw' : 'debug')
             + '.js'
             )
-
+            // setup OEM backgound here to prevent glitches
+            if(extjs_config.oem && extjs_config.oem.htm){
+                extjs_config.oem.htm.logo && (
+                    document.body.style.backgroundImage = 'url('+ url +'/'+ extjs_config.oem.htm.logo +')'
+                )
+            } else {
+                document.body.style.backgroundImage = 'url(css/supro.png)'
+            }
             if(url){
             // `nw` context
                 url = App.cfg.extjs.path// flip path

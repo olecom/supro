@@ -1,8 +1,8 @@
 {
     "name": "supro",
     "license": "MIT",
-    "version": "3.0.003",
-    "description": "v003@2015-05-12: SUPRO",
+    "version": "4.0.004",
+    "description": "v004@2015-10-17: SUPRO",
     "repository": {
         "type": "git",
         "url": "git://github.com/suprojs/supro"

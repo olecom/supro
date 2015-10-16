@@ -37,14 +37,13 @@
     },
     "main": "app_main/app.htm",
     "scripts": {
-        "install": "sh _ExtJS4_tools.sh || echo Use 'Git-MINGW32 for development under MS Winsows(R)'",
-        "start": "nw"
+        "install": "sh _ExtJS4_tools.sh || echo 'Use git-for-windows.github.io for development under MS Winsows(R)'",
+        "start": "nw || sh _devel_backend.sh || _devel_backend.cmd"
     },
     "engines": {
-        "Git-MINGW32": "1.9.5-preview20141217",
+        "Git@x86_64-pc-msys": [ "1.9.5.msysgit.1", "2.6.1.windows.1" ],
         "cygwin": "1.7.15",
-        "lftp": "4.3.7",
-        "node": "0.12.2",
+        "node": [ "0.12.7", "4.2.1" ],
         "nw.js": "0.12.1 (io.js: '1.2.0', Chromium: '41.0.2272.76')"
     },
     "extjs": {

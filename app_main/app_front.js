@@ -308,7 +308,7 @@ function restart(){
     }
 }
 
-function shutdown(){
+function shutdown(cb){
     http.get(
     {
         hostname: '127.0.0.1',
@@ -316,9 +316,11 @@ function shutdown(){
         path: '/cmd_exit',
         agent: false
     }, function(res){
+        cb && cb(0)
         App.sts(l10n.stsShutdown, l10n.stsStopSystem, l10n.stsOK)
         //TODO check if that process is still up or grep for pid to be sure
     }).on('error', function(e){
+        cb && cb(1)
         con.error("Shutdown error: " + e.message)
         App.sts(l10n.stsShutdown, e.message, l10n.stsOK)
     })
@@ -466,6 +468,15 @@ var cfg, fs = require('fs')
     fs.setAttribute('src', cfg + (win.localStorage.l10n || app.cfg.lang) + '.js')
     doc.head.appendChild(fs)
     fs = void 0
+
+    if(!app.cfg.modules.userman){
+    // shutdown backend on simple noauth no userman configs
+        gui.Window.get().on('close', function(){
+            shutdown(function(code){
+                process.exit(code)
+            })
+        })
+    }
 
     if(app.cfg.extjs.load || app.cfg.extjs.loadMiniInit){
     // nw.js opens `app.htm` where config is changed

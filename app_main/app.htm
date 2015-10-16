@@ -11,9 +11,9 @@
     <script type="text/javascript" src="l10n/configured.js" charset="utf-8"></script>
     <script type="text/javascript">(
     function pre_load(w, d, con){
-    var b, s = "FATAL ERROR: no language! File './l10n/ru.js' or similar."
+    var b, s = "FATAL ERROR: no language! File './l10n/en.js' or similar."
 
-        if(!w.l10n) return d.write(s) && w.alert(s)
+        if(!w.l10n && !w.process) return d.write(s) && w.alert(s)// `nw` case after config
         _startTime = new Date().getTime()
         localStorage.devSUPRO = '' // enable fast minimized loading
         localStorage.devSUPRO = '1'// disable minimized loading (developing)
@@ -25,15 +25,18 @@
         w.addEventListener('error', window_error)// show any errors early
 
         con.log('checking `localStorage.l10n`...')
-        if((s = localStorage.l10n) && s !== l10n.lang){
-            con.log('loading `localStorage.l10n`: ' + s)
+        s = localStorage.l10n
+        // check local storage l10n and configured if exists or process `nw` later
+        s = s ? (w.l10n && w.l10n.lang !== s ? s : '') : ''
+        if(s || w.process){// full `nw` l10n setup after config load
+            s && con.log('loading `localStorage.l10n`: ' + s)
             b = d.head.getElementsByTagName('script')
             d.head.removeChild(b[1])
             d.head.removeChild(b[0])
             b = d.createElement('script')
             b.setAttribute('type', 'application/javascript')
             b.setAttribute('charset', 'utf-8')
-            b.setAttribute('src', 'l10n/' + s + '.js')
+            b.setAttribute('src', 'l10n/' + (s || 'en') + '.js')// `nw` case after config
             d.head.appendChild(b)
         }
 

@@ -5,7 +5,7 @@
 
 var App
 
-;(function gc_wrapper(doc, w, l10n, con){
+;(function gc_wrapper(doc, w, con){
     App || (App = {
         // data
         cfg:{
@@ -593,4 +593,4 @@ function check_uncaughtExceptions(){
     })
 }
 
-})(document, window, l10n, window.console);
+})(document, window, window.console);

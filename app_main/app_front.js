@@ -1,7 +1,7 @@
 (function uglify_js_closure(con ,doc ,win ,l10n){
 /*
- * two frontend parts: under `node-webkit` (local) and `connectjs` in browser (http)
- * front end: node-webkit part
+ * two frontend parts: under `nw.js` (local) and `connectjs` in browser (http)
+ * front end: `nw.js` part
  */
     if(typeof process != 'undefined'){// `nodejs` runtime inside HTML (native desktop)
         App.process = process
@@ -442,6 +442,15 @@ var cfg, fs = require('fs')
         nw: app.process.versions['node-webkit']
     }
     con.log('reading config: ' + cfg + ' done')
+
+    fs = doc.head.getElementsByTagName('script')
+    doc.head.removeChild(fs[0])
+    fs = doc.createElement('script')
+    fs.setAttribute('type', 'application/javascript')
+    fs.setAttribute('charset', 'utf-8')// `nw.js` l10n case
+    fs.setAttribute('src', cfg + (win.localStorage.l10n || app.cfg.lang) + '.js')
+    doc.head.appendChild(fs)
+    fs = void 0
 
     if(app.cfg.extjs.load || app.cfg.extjs.loadMiniInit){
     // nw.js opens `app.htm` where config is changed

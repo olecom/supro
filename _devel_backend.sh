@@ -1,8 +1,7 @@
 #!/bin/sh
 
-# * $1 == 'mongo' launch mongo shell with current config DB name
-# * $1 == 'mongo-edit' launch mongo-edit current config DB name or
-#         env $NODEJS_MONGO_DB may change default database name
+# * $1 == 'mongo' launch mongo shell with current config DB name and port
+# * $1 == 'mongo-edit' launch mongo-edit current config DB name and port
 # * any param "$1" will redirect node.js' output i.e:
 #   1>>log/app_back_stdout.txt 2>>log/app_back_stderr.txt
 # * if env $NODEJS_CONFIG is exported it is used and no hardcoded file is read
@@ -55,7 +54,6 @@ case "$1" in
     exit 0
     ;;
     mongo-edit)
-    # env $NODEJS_MONGO_DB may change default database name
     sh app_modules/supromongod/etc/mongo-edit.sh
     trap '' 0
     exit 0

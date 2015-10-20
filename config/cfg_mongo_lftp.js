@@ -1,6 +1,6 @@
 // local vars to share in hash (kind of macro preprocessing)
+var DB = 'supro_GLOB'// is used in shell, export, import scripts of `supromongod/etc/*`
 var OBJ = 'GLOB'// differentiate instances of distributed SUPRO
-var DB  = 'supro_' + OBJ
 
 // NOTE: this arrays `fastLoad` and `defLoad` are being processed
 //        by `_ExtJS4_tools.sh` for `config.extjs.loadMiniInit == 'lite'`

@@ -35,6 +35,23 @@ Normal Exit${1:- (backend is running)}
 
 trap 'normal_exit' HUP TERM INT
 
+pecho(){
+    echo '^ check && set exec permission for `'"$1"'`'
+}
+
+case "$OSTYPE" in
+*cygwin* | *msys*) # MS Windows
+    : skip
+;;
+*linux-gnu* | *linux_gnu* | *)
+    echo
+    [ -f 'node' -a ! -x 'node' ] && pecho 'node' && chmod u+x 'node'
+    [ -f 'bin/node' -a ! -x 'bin/node' ] && pecho 'bin/node' && chmod u+x 'bin/node'
+    A='app_modules/supromongod/bin'
+    [ -f "$A/mongod" -a ! -x "$A/mongod" ] && pecho "$A/*" && chmod u+x $A/*
+;;
+esac
+
 if [ "$NODEJS_CONFIG" ]
 then
     echo '

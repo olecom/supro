@@ -60,7 +60,7 @@ else
     echo '
 ^ reading config in "$NODEJS_CONFIG" from file "./config/cfg_default.js"'
     NODEJS_CONFIG=`sed '' <./config/cfg_default.js`
-    echo '^ exporting it for childs'
+    echo '^ exporting it for children'
     export NODEJS_CONFIG
 fi
 
@@ -108,35 +108,17 @@ BACKEND="$BACKEND $A"
 A=${A##*/}
 A=${A%%.js*} # app_back
 
-# lftp way of http access (obsolete): `_lftp_http 1 'cmd_exit'`
-_lftp_http() { # $1=timeout $2=cmd
-    { # http head request with contentlength=0 reply
-        echo "[lftp->nodeJS:$JSAPPCTLPORT] sending '$2'"
-        lftp -c '
-set cmd:long-running 2
-set net:idle 2
-set net:timeout 2
-set net:max-retries 2
-set net:reconnect-interval-base '"$1"'
-set net:reconnect-interval-multiplier 1
-
-cd http://127.0.0.1:'"$BACKEND_PORT"'/ && cat '"$2"' && exit 0 || exit 1
-'
-    } 0</dev/null
-    return $?
-}
-
 _http() { # $1=cmd $2=timeout
     node './_http.js' "http://127.0.0.1:$BACKEND_PORT/$1" "$2"
 }
 
 [ "$1" ] && {
-    echo 'Logging in "./log/"'
-    [ -d './log/' ] || {
-        echo 'Creating "./log/"'
-        mkdir log
+    echo 'Logging in "./.log/"'
+    [ -d './.log/' ] || {
+        echo 'Creating "./.log/"'
+        mkdir '.log'
     }
-    exec 7>>log/${A}_stdout.txt 8>>log/${A}_stderr.txt
+    exec 7>>.log/${A}_stdout.txt 8>>.log/${A}_stderr.txt
 } || {
     exec 7>&1 8>&2
 }

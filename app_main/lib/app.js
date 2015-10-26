@@ -74,7 +74,7 @@ var api      = require('./api.js')
     var f, i, c, k, s, fs = require('fs')
 
         rootPrefix = (s = require('path').normalize(
-            __dirname + '/../../' + (cfg.data || 'data/')
+            __dirname + '/../../' + (cfg.data || '.data/')
         )) + (cfg.__name || '') + '_'
         // check data dir
         f = "D"

@@ -19,7 +19,7 @@ var dir, rbac_api, fs = require('fs')
     expand_can_unions()
     init_auth()// set default 'deny' authorization for all permissions
 
-    dir = __dirname + '/../../..' + cfg.data + '/rbac'
+    dir = __dirname + '/../../../' + cfg.data + '/rbac'
 
     fs.stat(dir,
     function stat_um_data_rbac_dir(err, d){

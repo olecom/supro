@@ -35,8 +35,8 @@ config = {
 
     /* standard configuration of extjs+node[.js -webkit] application */
     lang: 'ru',// base localization, must be provided by any module as fallback
-    data: 'data/',// directory for application data; defaults to 'data/'
-    log: 'log/',
+    data: '.data/',// directory for application data; defaults to '.data/'
+    log: '.log/',
 
     //TODO: uid gid new ids for process after start or partial init
     //TODO: connect `fastLoad` with 'extjs-mini-init-files.txt'
@@ -44,11 +44,11 @@ config = {
     // order matters: before auth module there are no restrictions to config
 
     // NOTE config: one level copy of this properties into default settings
-        suprolftpd:{// hardcoded data path is '$PWD/data/suprolftpd/'
+        suprolftpd:{// data path is 'cfg_data_path' || '$PWD/.data/suprolftpd/'
             OBJ:OBJ
         },
         supromongod:{
-            db_path: '/data/supromongod/' + OBJ + '/',
+            dbpath: '.data/supromongod/' + OBJ + '/',
             db_name: DB// as in depended modules
         },
     // auth module overwrites default and sets up per-user auth module loading
@@ -56,7 +56,7 @@ config = {
             store: 'fs' // TODO: fs || db
             //sess_maxage: //null: browser lifetime; default: ~9.3 hours one working day
            ,sess_puzl: 'puzzle-word$54321X'
-           ,data: '/data/um/'// store fs: chat logs
+           ,data: '.data/um/'// store fs: chat logs
            ,rbac:{
                can:{// list of permissions with arbitrary positive value
                     'module.example': true

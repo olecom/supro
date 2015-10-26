@@ -450,10 +450,10 @@ var cfg, fs = require('fs')
 
     if(app.cfg.oem){
     // "D:/_Projects/supro-olecom/app_main/app.htm" ->
-    // "D:/_Projects/supro-olecom/data/cfg_mini_[ htm || js]"
+    // "D:/_Projects/supro-olecom/.data/cfg_mini_[ htm || js]"
         cfg = global.require.main.filename.replace(
             /[/]app.htm$/,
-            '/../data/' + (app.cfg.__name || '') + '_'
+            '/../.data/' + (app.cfg.__name || '') + '_'
         )
         app.cfg.oem.htm.title && (doc.title = app.cfg.oem.htm.title.replace(/&copy;/, '©'))
     } else {// normal not OEM case

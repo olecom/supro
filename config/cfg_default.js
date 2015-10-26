@@ -7,8 +7,8 @@ config = {
 
     /* standard configuration of extjs+node[.js -webkit] application */
     lang: 'ru',// base localization, must be provided by any module as fallback
-    data: 'data/',// directory for application data; defaults to 'data/'
-    log: 'log/',
+    data: '.data/',// directory for application data; defaults to '.data/'
+    log: '.log/',
 
     //TODO: uid gid new ids for process after start or partial init
     modules:{// cfg for stack of things from 'app_modules'
@@ -18,7 +18,7 @@ config = {
         userman:{//#0: authentication and authorization (plus Chat)
             store: 'fs' // TODO: fs || db
            ,sess_puzl: 'puzzle-word$54321X'
-           ,data: '/data/um/'// store fs: chat logs
+           ,data: '.data/um/'// store fs: chat logs
            ,rbac:{
                can:{// list of permissions with arbitrary positive value
                     'module.example': true

@@ -7,10 +7,10 @@ config = {
 
     /* standard configuration of extjs+node[.js -webkit] application */
     lang: 'ru',// base localization, must be provided by any module as fallback
-    data: 'data/',// directory for application data; defaults to 'data/'
-    log: 'log/',
+    data: '.data/',// directory for application data; defaults to '.data/'
+    log: '.log/',
 
-    /* parse, serve from '/data/' directory 'app.htm', 'app-mini.htm' and
+    /* parse, serve from '/.data/' directory 'app.htm', 'app-mini.htm' and
      * `l10n` files with replaced strings from this OEM config */
 
     oem:{
@@ -39,7 +39,7 @@ config = {
         userman:{//#0: authentication and authorization (plus Chat)
             store: 'fs' // TODO: fs || db
            ,sess_puzl: 'puzzle-word$54321X'
-           ,data: '/data/um/'// store fs: chat logs
+           ,data: '.data/um/'// store fs: chat logs
            ,rbac:{
                can:{// list of permissions with arbitrary positive value
                     'module.example': true

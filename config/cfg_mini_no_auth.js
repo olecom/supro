@@ -7,8 +7,8 @@ config = {
 
     /* standard configuration of extjs+node.jst] application */
     lang: 'ru',// base localization, must be provided by any module as fallback
-    data: 'data/',// directory for application data; defaults to 'data/'
-    log: 'log/',
+    data: '.data/',// directory for application data; defaults to '.data/'
+    log: '.log/',
 
     modules:{// cfg for stack of things from 'app_modules'
        pingback: true,

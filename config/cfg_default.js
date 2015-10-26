@@ -8,7 +8,7 @@ config = {
     /* standard configuration of extjs+[node nw].js application */
     lang: 'ru',// base localization, must be provided by any module as fallback
     data: '.data/',// directory for application data; defaults to '.data/'
-    log: '.log/',
+    log: '.log/',// NOTE: this field is parsed by `_devel_backend.sh` && _prod_backend.sh
 
     //TODO: uid gid new ids for process after start or partial init
     modules:{// cfg for stack of things from 'app_modules'
@@ -67,8 +67,10 @@ config = {
         fading:  true// visual effects for content appearance
     },
     backend:{
+        // NOTE: this field is parsed by `_devel_backend.sh` && _prod_backend.sh
         file: 'app_main/app_back.js',
         job_port: 3007,
+        // NOTE: this field is parsed by `_devel_backend.sh` && _prod_backend.sh
         ctl_port: 3008,
         ctl_on_done: null,// set app module handlers for ctl close/app exit
         init_timeout: 123

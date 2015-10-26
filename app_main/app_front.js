@@ -140,7 +140,7 @@ function spawn_backend(app, restart){
     }
 
     log = app.cfg.log +
-          app.cfg.backend.file.replace(/[\\/]/g ,'_') + '-nw.log'
+          app.cfg.backend.file.replace(/[\\/]/g,'_') + '-nw.txt'
 
     app.process.env.NODEJS_CONFIG = JSON.stringify(app.cfg)
     backend = app.c_p.spawn(

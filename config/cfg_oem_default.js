@@ -8,7 +8,7 @@ config = {
     /* standard configuration of extjs+[node nw].js application */
     lang: 'ru',// base localization, must be provided by any module as fallback
     data: '.data/',// directory for application data; defaults to '.data/'
-    log: '.log/',
+    log: '.log/',// NOTE: this field is parsed by `_devel_backend.sh` && _prod_backend.sh
 
     /* parse, serve from '/.data/' directory 'app.htm', 'app-mini.htm' and
      * `l10n` files with replaced strings from this OEM config */

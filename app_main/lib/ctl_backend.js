@@ -1,9 +1,9 @@
 /*
 ==============================================================================
-\  / Process control HTTP channel 'http://127.0.0.1:' + cfg.backend.ctl_port
- \/  This scheme: child.kill([signal]), where signals can be 'SIGTERM' or 'SIGHUP'
- /\  is very old non cross platform way of child process control.
- \/
+\  / Process control HTTP channel on `localhost` (i.e. 127.*.*.*):
+ \/  URL: 'http://' + cfg.backend.ctl_host + ':' + cfg.backend.ctl_port
+ /\  This scheme: child.kill([signal]), where signals can be 'SIGTERM' or 'SIGHUP'
+ \/  is very old non cross platform way of child process control.
  /\  Here is HTTP server on controlling port
 /  \
 ================================================================================
@@ -14,6 +14,8 @@ module.exports = ctl_backend
 function ctl_backend(cfg, stat, uncaughtExceptions, run_backend){
 var ipt  = require('util').inspect
 var J = JSON, B = Buffer, p = process// cache global names
+var LOCALHOST = cfg.backend.ctl_host || '127.0.0.1'
+
 var ctl = require('http').createServer(
 function proc_ctl_http_serv(req, res){
 var body = ''
@@ -25,7 +27,7 @@ var body = ''
         body += uncaughtExceptions.join('\n====\n')
     } else if('/cmd_reload' == req.url){
         body += '$ is reloading\n'
-        return the_end()
+        the_end(0)// fall thru
     } else if('/cmd_exit' == req.url){
         return call_done_handlers(req, res, done_handlers)
     } else if ('/cmd_stat' == req.url){
@@ -47,9 +49,11 @@ ctl.on('listening',
 function proc_ctl_http_serv_listening(){
     ctl = stat.started = new Date()// fill `ctl` as running flag
     log(
-        '^ backend http proc ctl @ http://127.0.0.1:' + cfg.backend.ctl_port + '\n' +
+        '^ backend http proc ctl @ http://' + LOCALHOST + ':' + cfg.backend.ctl_port + '\n' +
         ctl.toISOString()
     )
+    // strict chaining: listening -> app run -> etc...
+    setImmediate(run_backend)// schedule this call to throw errors outside
 })
 
 ctl.on('error',
@@ -57,7 +61,7 @@ function proc_ctl_http_serv_error(e){
 // NOTE: net error handler must not be inside init(listen) callback!!!
     if('EADDRINUSE' == e.code){// 'EADDRNOTAVAIL'?
         log(
-            "!!! FATAL(ctl): can't listen host:port='127.0.0.1':" + cfg.backend.ctl_port +
+            "!!! FATAL(ctl): can't listen host:port='" + LOCALHOST + "':" + cfg.backend.ctl_port +
             "\n" + ipt(e) +
             "\nNOTE: check config 'ctl_port' option collision"
         )
@@ -91,34 +95,39 @@ cfg.backend.ctl_on_done = function ctl_on_done(handler){
 
 function call_done_handlers(req, res, arr){
 var i, code = 0, n = arr.length
+var call = ''
 
-    if(0 == n) return the_end(0, res)
     // setup res, write partials in callbacks
     res.writeHead(200, {'Content-Type': 'text/plain'})
     res.write('$ application is going down\n')
-    for(i = 0; i < n; ++i){
+    if(0 == n) return res.end(), the_end(0)
+    for(i = 0; i < n; ++i) try {
         arr[i](callback)
+    } catch(ex){
+        code += 1 + i
+        call += '! exception in called: ' + (arr[i] && arr[i].name) + '\n'
+        log(call, ex)
     }
-    return null
+    return call && callback()
 
     function callback(err, data){
         err  && log('! end error at #' + (code = n) + ': ', err)
         data && res.write(data) && res.write('\n')
+        call && (call = '', res.write(call))
         if(0 === --n){
-            the_end(code, res)
+            res.end(), the_end(code)
         }
     }
 }
 
-function the_end(code, res){
-    process.nextTick(function(){
-        log('$ application exit with code: ' + (code ? code : 0))
-        process.exit(code ? code : 0)
-    })
-    res && res.end()
+function the_end(code){
+    setTimeout(function(){
+        log((code ? '!' : '') + '$ application exit with code: ' + (code || 0))
+        p.exit(code || 0)
+    }, 16)
 }
 
-ctl.listen(cfg.backend.ctl_port ,'127.0.0.1' ,run_backend)
+ctl.listen(cfg.backend.ctl_port, LOCALHOST)
 ctl.unref()// "allow the program to exit if this is the only active server in the event system"
 ctl = null// setup is over, waiting for 'listening' event, `ctl` is running flag
 

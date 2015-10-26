@@ -36,7 +36,7 @@ config = {
     /* standard configuration of extjs+[node nw].js application */
     lang: 'ru',// base localization, must be provided by any module as fallback
     data: '.data/',// directory for application data; defaults to '.data/'
-    log: '.log/',
+    log: '.log/',// NOTE: this field is parsed by `_devel_backend.sh` && _prod_backend.sh
 
     //TODO: uid gid new ids for process after start or partial init
     //TODO: connect `fastLoad` with 'extjs-mini-init-files.txt'
@@ -49,6 +49,8 @@ config = {
         },
         supromongod:{
             dbpath: '.data/supromongod/' + OBJ + '/',
+            // NOTE: field is parsed by export, import scripts of `supromongod/etc/*`
+            port: 0,// 27727 is default value
             db_name: DB// as in depended modules
         },
     // auth module overwrites default and sets up per-user auth module loading
@@ -120,9 +122,13 @@ config = {
         fading:  true// visual effects for content appearance
     },
     backend:{
+        // NOTE: this field is parsed by `_devel_backend.sh` && _prod_backend.sh
         file: 'app_main/app_back.js',
         job_port: 3007,
+        job_host: '0.0.0.0',
+        // NOTE: this field is parsed by `_devel_backend.sh` && _prod_backend.sh
         ctl_port: 3008,
+        ctl_host: '127.0.0.1',// can differ e.g. OPENSHIFT_NODEJS_IP
         ctl_on_done: null,// set app module handlers for ctl close/app exit
         init_timeout: 123
        ,extjs:{

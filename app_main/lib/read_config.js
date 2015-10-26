@@ -1,5 +1,8 @@
 var cfg
 
+if(!process.env.NODEJS_CONFIG) throw ''
++'`process.env.NODEJS_CONFIG` is undefined; `export` it from OS shell for Node.JS.'
+
 try {//TODO: read config from file every require()
     cfg = JSON.parse(process.env.NODEJS_CONFIG)
 } catch(ex){

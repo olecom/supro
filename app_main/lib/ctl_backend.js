@@ -11,8 +11,9 @@
 
 module.exports = ctl_backend
 
-function ctl_backend(cfg, uncaughtExceptions, run_backend){
+function ctl_backend(cfg, stat, uncaughtExceptions, run_backend){
 var ipt  = require('util').inspect
+var J = JSON, B = Buffer, p = process// cache global names
 var ctl = require('http').createServer(
 function proc_ctl_http_serv(req, res){
 var body = ''
@@ -28,22 +29,23 @@ var body = ''
     } else if('/cmd_exit' == req.url){
         return call_done_handlers(req, res, done_handlers)
     } else if ('/cmd_stat' == req.url){
-        body += Math.ceil(process.uptime()) + '\n' + ctl.toISOString()
+        stat.uptime = p.uptime()
+        body += J.stringify(stat)// stats, health, monitoring, metrics
     } else {// show some info about this
-        body += '? pid: ' + process.pid +
+        body += '? pid: ' + p.pid +
         '\ncontrol channel resourses:\n' +
         '\n"sts_running", "cmd_stat", "cmd_exit"' +
         '\n\n' +
         'application under control is at HTTP port: ' + cfg.backend.job_port + '\n'
     }
     // use vanilla `res` (no `res.json` or `res.txt`)
-    res.writeHead(200 ,{ 'Content-Length': body.length, 'Content-Type': 'text/plain' })
+    res.writeHead(200,{'Content-Length': B.byteLength(body),'Content-Type':'text/plain'})
     return res.end(body)
 })
 
 ctl.on('listening',
 function proc_ctl_http_serv_listening(){
-    ctl = new Date()// fill `ctl` as running flag
+    ctl = stat.started = new Date()// fill `ctl` as running flag
     log(
         '^ backend http proc ctl @ http://127.0.0.1:' + cfg.backend.ctl_port + '\n' +
         ctl.toISOString()
@@ -92,9 +94,7 @@ var i, code = 0, n = arr.length
 
     if(0 == n) return the_end(0, res)
     // setup res, write partials in callbacks
-    res.writeHead(200 ,{ /*'Content-Length': body.length,*/
-                         'Content-Type': 'text/plain' }
-    )
+    res.writeHead(200, {'Content-Type': 'text/plain'})
     res.write('$ application is going down\n')
     for(i = 0; i < n; ++i){
         arr[i](callback)

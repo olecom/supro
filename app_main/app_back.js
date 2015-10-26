@@ -1,5 +1,5 @@
 (function uglify_js_closure(global, process, con){
-var cfg, uncaughtExceptions
+var stat, cfg, uncaughtExceptions
 
     global.log = function log(a, b, c){
         if(b && c) con.log(a, b, c)
@@ -8,8 +8,12 @@ var cfg, uncaughtExceptions
     uncaughtExceptions = [ ]
     require('./lib/process.js')(global, process, uncaughtExceptions)
 
+    stat = {
+        started: null,
+        uptime: 0
+    }
     cfg = require('./lib/read_config.js')
-    require('./lib/ctl_backend.js')(cfg, uncaughtExceptions, run_backend)
+    require('./lib/ctl_backend.js')(cfg, stat, uncaughtExceptions, run_backend)
     require('./lib/response.js')
 
     return
@@ -19,6 +23,6 @@ var cfg, uncaughtExceptions
             new Date().toISOString()
         )
 
-        return require('./lib/app.js')(cfg, uncaughtExceptions)
+        return require('./lib/app.js')(cfg, stat, uncaughtExceptions)
     }
 })(global, process, console)

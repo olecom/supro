@@ -4,8 +4,9 @@
 
 module.exports = app_modules
 
-function app_modules(cfg, api){
+function app_modules(api, cfg, stat){
 var m, mpath
+   ,mcfg
    ,err = ''
    ,fs = require('fs')
    ,modules = { }// private list of modules
@@ -22,7 +23,8 @@ var m, mpath
         } catch(ex){/* will try to load file e.g.: app_modules/pingback.js */}
         mpath += '.js'
         try {// to load the module
-            modules[m] = require(mpath)(api, cfg.modules[m])
+            mcfg = cfg.modules[m]
+            modules[m] = require(mpath)(api, mcfg, get_module_stat(m, mcfg && mcfg.stat))
             if(modules[m].app_use){
                 if(app_use){
                     app_use.push(modules[m].app_use)
@@ -52,5 +54,9 @@ var m, mpath
 
     function get_modules(){
         return modules
+    }
+
+    function get_module_stat(modname, enable){
+        return enable ? stat[modname] = Object.create(null) : void 0
     }
 }

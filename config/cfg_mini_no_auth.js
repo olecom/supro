@@ -5,7 +5,7 @@ config = {
  */
     __name: 'cfg_mini_no_auth',
 
-    /* standard configuration of extjs+node.jst] application */
+    /* standard configuration of extjs+[node nw].js application */
     lang: 'ru',// base localization, must be provided by any module as fallback
     data: '.data/',// directory for application data; defaults to '.data/'
     log: '.log/',

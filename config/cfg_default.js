@@ -5,7 +5,7 @@ config = {
  */
     __name: 'cfg_default',
 
-    /* standard configuration of extjs+node[.js -webkit] application */
+    /* standard configuration of extjs+[node nw].js application */
     lang: 'ru',// base localization, must be provided by any module as fallback
     data: '.data/',// directory for application data; defaults to '.data/'
     log: '.log/',
@@ -19,6 +19,7 @@ config = {
             store: 'fs' // TODO: fs || db
            ,sess_puzl: 'puzzle-word$54321X'
            ,data: '.data/um/'// store fs: chat logs
+           ,stat: true// enable module statistics, metrics, health for app
            ,rbac:{
                can:{// list of permissions with arbitrary positive value
                     'module.example': true

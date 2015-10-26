@@ -5,7 +5,7 @@
 
 module.exports = runApp
 
-function runApp(cfg, uncaughtExceptions){
+function runApp(cfg, stat, uncaughtExceptions){
 var api      = require('./api.js')
    ,sendFile = require('./middleware/sendFile.js')
    ,_404     = require('./middleware/404.js')
@@ -42,7 +42,7 @@ var api      = require('./api.js')
     app.use('/app_back.js' , _404)// hide
     app.use('/app_front.js' , sendFile('app_front_http.js'))// switch to web UI
 
-    require('../../app_modules/')(cfg, api)
+    require('../../app_modules/')(api, cfg, stat)
 
     /* backend static files for HTTP users */
     cfg.oem && oem_files()
@@ -56,7 +56,7 @@ var api      = require('./api.js')
     /* final stage: error path */
     app.use(require('./middleware/errorHandler.js'))
        .use(_404)// no middleware handled request
-    .listen(cfg.backend.job_port, function app_is_up_and_running(){
+    .listen(cfg.backend.job_port, cfg.backend.job_host, function(){
         log('^ app is up and running @ port ' + cfg.backend.job_port + '\n' +
             new Date().toISOString()
         )

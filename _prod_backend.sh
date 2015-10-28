@@ -80,6 +80,11 @@ else
     NODEJS_CONFIG=`sed '' <./config/cfg_default.js`
     echo '^ exporting it for children'
 fi
+
+A=${NODEJS_CONFIG##*__name:}
+A=${A%%,*}
+echo "^ config name:$A"
+
 # export it if this script is `sourced/included` or after assignment above
 export NODEJS_CONFIG
 

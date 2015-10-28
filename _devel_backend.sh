@@ -64,6 +64,10 @@ else
     export NODEJS_CONFIG
 fi
 
+A=${NODEJS_CONFIG##*__name:}
+A=${A%%,*}
+echo "^ config name:$A"
+
 case "$1" in
     mongo)
     sh app_modules/supromongod/etc/mongo-shell.sh

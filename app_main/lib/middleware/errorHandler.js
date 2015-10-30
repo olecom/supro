@@ -5,7 +5,7 @@ var idx
     if (err.status) res.statusCode = err.status
     if (res.statusCode < 400) res.statusCode = 500
 
-    log('errorHandler: ', err.stack || err)
+    log(new Date().toISOString() + ' errorHandler: ', err.stack || err)
     log('URL: ', req.originalUrl)// magic place in `connect` for original URL (actual can be parsed)
     log('data: ', req.json || 'null')// log JSON data (from stores, etc.)
 

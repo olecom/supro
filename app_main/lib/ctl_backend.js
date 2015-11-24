@@ -68,7 +68,7 @@ function proc_ctl_http_serv_error(e){
     } else {//FIXME: handle all fatal errors to unset `ctl` and process.exit()
         log("! ERROR(ctl) controlling http channel: " + ipt(e))
     }
-    if (!ctl) process.exit(1)
+    if (!ctl) the_end(1)
 })
 
 ctl.on('clientError',
@@ -93,14 +93,23 @@ cfg.backend.ctl_on_done = function ctl_on_done(handler){
     return
 }
 
-function call_done_handlers(req, res, arr){
-var i, code = 0, n = arr.length
-var call = ''
+function call_done_handlers(req, res, arr, signum){
+var i, n, code, call
+
+    n = arr.length, code = signum, call = ''
 
     // setup res, write partials in callbacks
-    res.writeHead(200, {'Content-Type': 'text/plain'})
-    res.write('$ application is going down\n')
-    if(0 == n) return res.end(), the_end(0)
+    res && (
+        res.writeHead(200, {'Content-Type': 'text/plain'}),
+        res.write('$ application is going down\n')
+    )
+
+    if(0 == n){
+        res && res.end()
+        the_end(0)
+        return
+    }
+
     for(i = 0; i < n; ++i) try {
         arr[i](callback)
     } catch(ex){
@@ -112,10 +121,11 @@ var call = ''
 
     function callback(err, data){
         err  && log('! end error at #' + (code = n) + ': ', err)
-        data && res.write(data) && res.write('\n')
-        call && (call = '', res.write(call))
+        data && res && res.write(data) && res.write('\n')
+        call && (call = '', res && res.write(call))
         if(0 === --n){
-            res.end(), the_end(code)
+            res && res.end()
+            the_end(code)
         }
     }
 }
@@ -130,5 +140,20 @@ function the_end(code){
 ctl.listen(cfg.backend.ctl_port, LOCALHOST)
 ctl.unref()// "allow the program to exit if this is the only active server in the event system"
 ctl = null// setup is over, waiting for 'listening' event, `ctl` is running flag
+
+p.once('SIGTERM', function SIGTERM(){
+    log('! got SIGTERM')//SIGTERM 15
+    call_done_handlers(null, null, done_handlers, 128 + 15)
+})
+
+p.once('SIGINT', function SIGINT(){
+    log('! got SIGINT')//SIGINT 2
+    call_done_handlers(null, null, done_handlers, 128 + 2)
+})
+
+p.once('SIGHUP', function SIGHUP(){
+    log('! got SIGHUP')//SIGHUP 1
+    call_done_handlers(null, null, done_handlers, 128 + 1)
+})
 
 }

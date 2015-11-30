@@ -1,6 +1,6 @@
 Ext.define('App.example.view.Supro',
 {
-    extend: App.view.Window,
+    extend: 'App.view.Window',// in the very basic setup this class may not be loaded yet
     title: l10n.ex.title,
     wmImg: App.backendURL + '/css/example/yd.png',
     wmTooltip: l10n.ex.tooltip,
